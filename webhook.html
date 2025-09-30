@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WhatsApp Webhook Proxy</title>
+</head>
+<body>
+    <script>
+        // WhatsApp Webhook Proxy to Emergent subdomain
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hubMode = urlParams.get('hub.mode');
+            const hubChallenge = urlParams.get('hub.challenge');
+            const hubVerifyToken = urlParams.get('hub.verify_token');
+            
+            // If this is a GET request with webhook verification parameters
+            if (hubMode && hubChallenge && hubVerifyToken) {
+                // Forward to our actual webhook endpoint
+                const proxyUrl = 'https://event-ai-helper.preview.emergentagent.com/api/webhook/whatsapp?' + window.location.search.substring(1);
+                
+                fetch(proxyUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Return the challenge as plain text
+                    document.body.innerHTML = data;
+                    document.body.style.fontFamily = 'monospace';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.body.innerHTML = 'Webhook verification failed';
+                });
+            } else {
+                // For other requests, show info
+                document.body.innerHTML = `
+                    <h1>WhatsApp Webhook Proxy</h1>
+                    <p>This endpoint proxies WhatsApp webhook requests to the Amazon Smbhav AI Assistant.</p>
+                    <p>Target: <code>https://event-ai-helper.preview.emergentagent.com/api/webhook/whatsapp</code></p>
+                    <p>Status: Active</p>
+                `;
+            }
+        })();
+    </script>
+</body>
+</html>
