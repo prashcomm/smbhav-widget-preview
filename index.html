@@ -28,39 +28,132 @@
             background-position: center; /* Center the image */
             background-repeat: no-repeat; /* Do not repeat the image */
         }
-
-        /* Styling for the chatbot toggle button */
-        #chat-toggle {
+        
+        /* Smbhav Assistant Widget Styles */
+        #smbhav-chat-button {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: #FF9900; /* Amazon brand color */
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
             color: white;
-            padding: 12px 20px;
             border: none;
             border-radius: 50px;
-            cursor: pointer;
+            padding: 15px 25px;
             font-size: 16px;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease-in-out;
-            z-index: 1000;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.4);
+            z-index: 1001;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        #chat-toggle:hover {
-            transform: scale(1.05);
+        #smbhav-chat-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.6);
+            background: linear-gradient(135deg, #f7931e 0%, #ff6b35 100%);
         }
-        
-        /* Styling for the chatbot iframe widget */
+
+        #smbhav-chat-button.widget-open {
+            background: #6b7280;
+            box-shadow: 0 4px 20px rgba(107, 114, 128, 0.4);
+        }
+
+        #smbhav-chat-button.widget-open:hover {
+            background: #4b5563;
+            box-shadow: 0 6px 25px rgba(107, 114, 128, 0.6);
+        }
+
         #smbhav-chat-widget {
             position: fixed;
-            bottom: 100px; /* Position it above the toggle button */
-            right: 30px;
-            display: none; /* Initially hidden */
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            bottom: 90px;
+            right: 20px;
+            width: 400px;
+            height: 600px;
             z-index: 1000;
-            transition: opacity 0.3s ease;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(20px) scale(0.95);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        #smbhav-chat-widget.widget-visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        #smbhav-chat-widget iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 15px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            #smbhav-chat-widget {
+                bottom: 0;
+                right: 0;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                transform: translateY(100%);
+            }
+
+            #smbhav-chat-widget.widget-visible {
+                transform: translateY(0);
+            }
+
+            #smbhav-chat-button {
+                bottom: 15px;
+                right: 15px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        /* Chat button icon */
+        .chat-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Close button icon */
+        .close-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Notification badge (optional) */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -68,32 +161,108 @@
 
     <!-- This div holds the background image -->
     <div class="background-container"></div>
-
-    <!-- Your AI Chatbot widget embed code -->
-    <iframe 
-      src="https://aws-chatbot-help.preview.emergentagent.com" 
-      width="400" 
-      height="600"
-      frameborder="0"
-      id="smbhav-chat-widget">
-    </iframe>
-
-    <!-- Toggle Button for the Chatbot -->
-    <button onclick="toggleChatWidget()" id="chat-toggle">
-      Smbhav Assistant
+    
+    <!-- Smbhav Assistant Toggle Button -->
+    <button id="smbhav-chat-button" onclick="toggleSmbhavWidget()">
+        <svg class="chat-icon" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+        </svg>
+        <span id="button-text">Smbhav Assistant</span>
+        <!-- Optional notification badge -->
+        <!-- <div class="notification-badge">1</div> -->
     </button>
 
+    <!-- Amazon Smbhav Chat Widget (Hidden by default) -->
+    <div id="smbhav-chat-widget">
+        <iframe 
+            id="smbhavChatFrame"
+            src="https://smbhav-assist.preview.emergentagent.com/"
+            title="Amazon Smbhav AI Assistant">
+        </iframe>
+    </div>
+
     <script>
-        // Your provided script to toggle the widget's visibility
-        function toggleChatWidget() {
-          const widget = document.getElementById('smbhav-chat-widget');
-          // A slightly improved toggle to handle initial state
-          if (widget.style.display === 'block') {
-            widget.style.display = 'none';
-          } else {
-            widget.style.display = 'block';
-          }
+        let isWidgetOpen = false;
+
+        // Set user context for personalized experience
+        window.SmbhavChat = {
+            userPhone: "+1234567890",           // User's phone number  
+            userName: "John Doe",               // User's name
+            userEmail: "john@example.com",      // User's email
+            userId: "user_12345"                // Your internal user ID
+        };
+
+        function toggleSmbhavWidget() {
+            const widget = document.getElementById('smbhav-chat-widget');
+            const button = document.getElementById('smbhav-chat-button');
+            const buttonText = document.getElementById('button-text');
+            
+            if (isWidgetOpen) {
+                // Close widget
+                widget.classList.remove('widget-visible');
+                button.classList.remove('widget-open');
+                buttonText.textContent = 'Smbhav Assistant';
+                
+                // Update button icon to chat icon
+                button.querySelector('.chat-icon').innerHTML = '<path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>';
+                
+                isWidgetOpen = false;
+            } else {
+                // Open widget
+                widget.classList.add('widget-visible');
+                button.classList.add('widget-open');
+                buttonText.textContent = 'Close Chat';
+                
+                // Update button icon to close icon  
+                button.querySelector('.chat-icon').innerHTML = '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>';
+                
+                // Send user data to iframe when opened
+                setTimeout(() => {
+                    sendUserDataToWidget();
+                }, 500);
+                
+                isWidgetOpen = true;
+            }
         }
+
+        function sendUserDataToWidget() {
+            const chatFrame = document.getElementById('smbhavChatFrame');
+            if (chatFrame && window.SmbhavChat) {
+                chatFrame.contentWindow.postMessage({
+                    type: 'SmbhavUserData',
+                    userData: window.SmbhavChat
+                }, '*');
+            }
+        }
+
+        // Listen for user data requests from iframe
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'RequestUserData') {
+                if (window.SmbhavChat) {
+                    event.source.postMessage({
+                        type: 'SmbhavUserData',
+                        userData: window.SmbhavChat
+                    }, '*');
+                }
+            }
+        });
+
+        // Optional: Auto-open widget after delay (remove if not needed)
+        // setTimeout(() => {
+        //     if (!isWidgetOpen) {
+        //         toggleSmbhavWidget();
+        //     }
+        // }, 5000);
+
+        // Optional: Close widget when clicking outside (remove if not needed)
+        // document.addEventListener('click', function(event) {
+        //     const widget = document.getElementById('smbhav-chat-widget');
+        //     const button = document.getElementById('smbhav-chat-button');
+        //     
+        //     if (isWidgetOpen && !widget.contains(event.target) && !button.contains(event.target)) {
+        //         toggleSmbhavWidget();
+        //     }
+        // });
     </script>
 
 </body>
