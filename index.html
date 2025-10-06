@@ -41,25 +41,30 @@
             box-shadow: 0 6px 25px rgba(107, 114, 128, 0.6);
         }
 
-        #smbhav-chat-widget {
+        #smbhav-chat-container {
             position: fixed;
             bottom: 90px;
             right: 20px;
             width: 400px;
-            height: 600px;
             z-index: 1000;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             transform: translateY(20px) scale(0.95);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
         }
 
-        #smbhav-chat-widget.widget-visible {
+        #smbhav-chat-container.widget-visible {
             transform: translateY(0) scale(1);
             opacity: 1;
             visibility: visible;
+        }
+
+        #smbhav-chat-widget {
+            width: 100%;
+            height: 600px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
 
         #smbhav-chat-widget iframe {
@@ -69,76 +74,93 @@
             border-radius: 15px;
         }
 
+        /* Amazon Logo Styling */
+        #amazon-logo {
+            margin-top: 10px;
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #amazon-logo img {
+            height: 20px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        #amazon-logo:hover img {
+            opacity: 1;
+        }
+
         /* Mobile responsive with proper padding */
         @media (max-width: 768px) {
-            #smbhav-chat-widget {
-                bottom: 20px; /* Added bottom padding */
+            #smbhav-chat-container {
+                bottom: 20px;
                 right: 10px;
                 left: 10px;
-                top: 20px; /* Added top padding */
-                width: calc(100% - 20px); /* Account for left/right padding */
-                height: calc(100vh - 40px); /* Account for top/bottom padding */
-                border-radius: 15px; /* Keep rounded corners on mobile */
-                transform: translateY(100%);
-                max-height: calc(100vh - 40px); /* Ensure it doesn't overflow */
+                top: 20px;
+                width: calc(100% - 20px);
             }
 
-            #smbhav-chat-widget.widget-visible {
-                transform: translateY(0);
+            #smbhav-chat-widget {
+                height: calc(100vh - 80px); /* Account for logo space */
+                border-radius: 15px;
+            }
+
+            #amazon-logo {
+                margin-top: 8px;
+                padding: 6px;
+                border-radius: 0 0 15px 15px;
+            }
+
+            #amazon-logo img {
+                height: 18px;
             }
 
             #smbhav-chat-button {
-                bottom: 30px; /* Moved up slightly */
+                bottom: 30px;
                 right: 20px;
                 padding: 12px 20px;
                 font-size: 14px;
-                z-index: 1002; /* Higher than widget */
+                z-index: 1002;
             }
         }
 
-        /* Extra small screens (phones in landscape, small phones) */
+        /* Extra small screens */
         @media (max-width: 480px) {
-            #smbhav-chat-widget {
-                bottom: 15px; /* Smaller padding on very small screens */
+            #smbhav-chat-container {
+                bottom: 15px;
                 right: 5px;
                 left: 5px;
                 top: 15px;
                 width: calc(100% - 10px);
-                height: calc(100vh - 30px);
+            }
+
+            #smbhav-chat-widget {
+                height: calc(100vh - 70px);
                 border-radius: 10px;
             }
 
-            #smbhav-chat-button {
-                bottom: 25px;
-                right: 15px;
-                padding: 10px 16px;
-                font-size: 13px;
+            #amazon-logo {
+                border-radius: 0 0 10px 10px;
+            }
+
+            #amazon-logo img {
+                height: 16px;
             }
         }
 
         /* iPhone safe area support */
         @media (max-width: 768px) and (orientation: portrait) {
-            #smbhav-chat-widget {
+            #smbhav-chat-container {
                 bottom: max(20px, env(safe-area-inset-bottom, 20px));
                 top: max(20px, env(safe-area-inset-top, 20px));
-                height: calc(100vh - max(40px, calc(env(safe-area-inset-top, 20px) + env(safe-area-inset-bottom, 20px))));
             }
 
-            #smbhav-chat-button {
-                bottom: max(30px, calc(env(safe-area-inset-bottom, 20px) + 10px));
-            }
-        }
-
-        /* Landscape orientation adjustments */
-        @media (max-width: 768px) and (orientation: landscape) {
             #smbhav-chat-widget {
-                bottom: 10px;
-                top: 10px;
-                height: calc(100vh - 20px);
-            }
-
-            #smbhav-chat-button {
-                bottom: 20px;
+                height: calc(100vh - max(80px, calc(env(safe-area-inset-top, 20px) + env(safe-area-inset-bottom, 20px) + 40px)));
             }
         }
 
@@ -147,36 +169,6 @@
             width: 20px;
             height: 20px;
             fill: currentColor;
-        }
-
-        /* Close button icon */
-        .close-icon {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
-
-        /* Notification badge (optional) */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
         }
 
         /* Prevent body scroll when widget is open on mobile */
@@ -188,25 +180,31 @@
     </style>
 </head>
 <body>
-    <!-- Your website content -->
-    
     <!-- Smbhav Assistant Toggle Button -->
     <button id="smbhav-chat-button" onclick="toggleSmbhavWidget()">
         <svg class="chat-icon" viewBox="0 0 24 24">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
         </svg>
         <span id="button-text">Smbhav Assistant</span>
-        <!-- Optional notification badge -->
-        <!-- <div class="notification-badge">1</div> -->
     </button>
 
-    <!-- Amazon Smbhav Chat Widget (Hidden by default) -->
-    <div id="smbhav-chat-widget">
-        <iframe 
-            id="smbhavChatFrame"
-            src="https://smbhav-assist.preview.emergentagent.com/"
-            title="Amazon Smbhav AI Assistant">
-        </iframe>
+    <!-- Amazon Smbhav Chat Container (Hidden by default) -->
+    <div id="smbhav-chat-container">
+        <!-- Chat Widget -->
+        <div id="smbhav-chat-widget">
+            <iframe 
+                id="smbhavChatFrame"
+                src="https://smbhav-assist.preview.emergentagent.com/"
+                title="Amazon Smbhav AI Assistant">
+            </iframe>
+        </div>
+        
+        <!-- Amazon Logo -->
+        <div id="amazon-logo">
+            <a href="https://aws.amazon.com/what-is-cloud-computing" target="_blank">
+                <img src="https://d0.awsstatic.com/logos/powered-by-aws.png" alt="Powered by AWS Cloud Computing">
+            </a>
+        </div>
     </div>
 
     <script>
@@ -214,24 +212,22 @@
 
         // Set user context for personalized experience
         window.SmbhavChat = {
-            userPhone: "+1234567890",           // User's phone number  
-            userName: "John Doe",               // User's name
-            userEmail: "john@example.com",      // User's email
-            userId: "user_12345"                // Your internal user ID
+            userPhone: "+1234567890",
+            userName: "John Doe",
+            userEmail: "john@example.com",
+            userId: "user_12345"
         };
 
         function toggleSmbhavWidget() {
-            const widget = document.getElementById('smbhav-chat-widget');
+            const container = document.getElementById('smbhav-chat-container');
             const button = document.getElementById('smbhav-chat-button');
             const buttonText = document.getElementById('button-text');
             
             if (isWidgetOpen) {
                 // Close widget
-                widget.classList.remove('widget-visible');
+                container.classList.remove('widget-visible');
                 button.classList.remove('widget-open');
                 buttonText.textContent = 'Smbhav Assistant';
-                
-                // Remove body scroll lock on mobile
                 document.body.classList.remove('widget-open');
                 
                 // Update button icon to chat icon
@@ -240,7 +236,7 @@
                 isWidgetOpen = false;
             } else {
                 // Open widget
-                widget.classList.add('widget-visible');
+                container.classList.add('widget-visible');
                 button.classList.add('widget-open');
                 buttonText.textContent = 'Close Chat';
                 
@@ -283,14 +279,13 @@
             }
         });
 
-        // Handle escape key to close widget
+        // Handle escape key and resize events
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape' && isWidgetOpen) {
                 toggleSmbhavWidget();
             }
         });
 
-        // Handle resize events
         window.addEventListener('resize', function() {
             if (isWidgetOpen && window.innerWidth <= 768) {
                 document.body.classList.add('widget-open');
